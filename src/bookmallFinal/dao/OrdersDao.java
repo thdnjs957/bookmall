@@ -240,7 +240,7 @@ public class OrdersDao {
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.0.12:3306/bookmall";
+			String url = "jdbc:mariadb://192.168.1.2:3307/bookmall";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 
 		} catch (ClassNotFoundException e) {
