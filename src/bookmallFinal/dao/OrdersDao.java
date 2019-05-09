@@ -14,7 +14,7 @@ import bookmallFinal.vo.OrdersVo;
 
 public class OrdersDao {
 	
-	public boolean insert(OrdersVo vo) {
+	public Long insert(OrdersVo vo) {
 
 		boolean result = false;
 
@@ -22,6 +22,7 @@ public class OrdersDao {
 		PreparedStatement pstmt = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		Long ordersNo = -1L;
 		
 		try {
 			conn = getConnection();
@@ -41,16 +42,12 @@ public class OrdersDao {
 			rs = stmt.executeQuery("select last_insert_id()"); //이 전에 쿼리의 pk값 받아오기
 			
 			if (rs.next()) {
-				vo.setNo(rs.getLong(1));
+				//vo.setNo(rs.getLong(1));
+				ordersNo = rs.getLong(1);
 			}
+			 
+			//result = (count == 1);
 			
-			Long orders_pk = vo.getNo();
-			
-			result = (count == 1);
-			
-			List <OrderBookVo> list = new ArrayList<OrderBookVo>();
-			
-			insertOrderBook()
 
 		} catch (SQLException e) {
 			System.out.println("error" + e);
@@ -66,12 +63,12 @@ public class OrdersDao {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return ordersNo;
 
 	}
 	
-	
-	public boolean insertOrderBook(List <OrderBookVo> list) {
+	//주문도서 insert 
+	public boolean insertOrderBook(OrderBookVo vo) {
 
 		boolean result = false;
 
@@ -87,20 +84,15 @@ public class OrdersDao {
 
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setLong(1, vo.getMember_no());
-			pstmt.setInt(2, vo.getPrice());
-			pstmt.setString(3, vo.getReceive_addr());
-			pstmt.setLong(4, vo.getMember_no());
+			pstmt.setInt(1, vo.getCount());
+			pstmt.setLong(2, vo.getOrder_no());
+			pstmt.setLong(3, vo.getBook_no());
+			
 			
 			int count = pstmt.executeUpdate();
 
 			stmt = conn.createStatement();
 			
-			rs = stmt.executeQuery("select last_insert_id()"); //이 전에 쿼리의 pk값 받아오기
-
-			if (rs.next()) {
-				vo.setNo(rs.getLong(1));
-			}
 
 			result = (count == 1);
 
@@ -123,7 +115,7 @@ public class OrdersDao {
 	}
 	
 
-	public List<OrdersVo> getOrderList(Long no) {
+	public List<OrdersVo> getOrderList(Long paramNo) {
 
 		List<OrdersVo> result = new ArrayList<OrdersVo>();
 
@@ -137,25 +129,32 @@ public class OrdersDao {
 			conn = getConnection();
 			//select 할때 vo.get
 			
-			String sql = "select b.no, b.price, b.title, c.no from book b, category c WHERE b.category_no = c.no";
+			String sql = "select m.no, m.name, m.email, o.price, o.receive_addr, o.no from orders o and member m where o.member_no = m.no and member_no = ?";
 
 			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, paramNo);
 
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 
-				Long no = rs.getLong(1);
-				Long price = rs.getLong(2);
-				String title = rs.getString(3);
-				Long category_no = rs.getLong(4);
-
+				Long memberNo = rs.getLong(1);
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				int price = rs.getInt(4);
+				String receiveAddr = rs.getString(5);
+				Long no = rs.getLong(6);
+				
 				OrdersVo vo = new OrdersVo();
-				vo.setNo(no);
+				
+				vo.setMember_no(memberNo);
+				vo.setName(name);
+				vo.setEmail(email);
 				vo.setPrice(price);
-				vo.setTitle(title);
-				vo.setCategory_no(category_no);
-
+				vo.setReceive_addr(receiveAddr);
+				vo.setNo(no);
+				
 				result.add(vo);
 			}
 
@@ -181,7 +180,7 @@ public class OrdersDao {
 
 	//호출할때 getOrderBookList()
 	
-	public List<OrderBookVo> getOrderBookList(Long order_no) { //order_book
+	public List<OrderBookVo> getOrderBookList(Long ordersNo) { //order_book
 
 		List<OrderBookVo> result = new ArrayList<OrderBookVo>();
 
@@ -194,22 +193,24 @@ public class OrdersDao {
 
 			conn = getConnection();
 
-			String sql = "select b.no, b.price, b.title, c.no from book b, category c WHERE b.category_no = c.no";
+			String sql = "SELECT b.title, a.count, b.price FROM order_book a, book b WHERE a.book_no = b.no and a.order_no = ?";
 
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, ordersNo);
 
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 
-				Long no = rs.getLong(1);
-				Long price = rs.getLong(2);
-				String title = rs.getString(3);
-				Long category_no = rs.getLong(4);
-
+				String title = rs.getString(1);
+				int count = rs.getInt(2);
+				int price = rs.getInt(3);
+				
 				OrderBookVo vo = new OrderBookVo();
-				vo.setNo(no);
-
+				vo.setTitle(title);
+				vo.setCount(count);
+				vo.setPrice(price);
+				
 				result.add(vo);
 			}
 
@@ -234,14 +235,12 @@ public class OrdersDao {
 	}
 
 	
-	
-	
 	private Connection getConnection() throws SQLException {
 
 		Connection conn = null;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.2:3307/bookmall";
+			String url = "jdbc:mariadb://192.168.0.12:3306/bookmall";
 			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
 
 		} catch (ClassNotFoundException e) {
