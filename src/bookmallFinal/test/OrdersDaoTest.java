@@ -39,12 +39,10 @@ public class OrdersDaoTest {
 	
 	public static void getOrdersList(Long memberNo) {
 		OrdersDao dao = new OrdersDao();
-		
 		List<OrdersVo> list = dao.getOrderList(memberNo);
-		
-		System.out.println("주문 리스트");
+		System.out.println("*******주문 리스트*******");
 		for(OrdersVo vo : list) {
-			System.out.println("이름 : "+vo.getName()+", 가격 : "+ vo.getPrice() + ", 이메일 : "+ vo.getEmail()+", 주소 : "+vo.getReceive_addr());
+			System.out.println("주문 번호 : "+vo.getOrder_no()+", 이름 : "+vo.getName()+", 결제금액 : "+ vo.getPrice() + ", 이메일 : "+ vo.getEmail()+", 배송지 : "+vo.getReceive_addr());
 		}
 	}
 	
@@ -60,9 +58,9 @@ public class OrdersDaoTest {
 	public static void getOrderBookList(Long ordersNo) {
 		OrdersDao dao = new OrdersDao();
 		List<OrderBookVo> list = dao.getOrderBookList(ordersNo);
-		System.out.println("주문 도서 리스트");
+		System.out.println("*******주문 도서 리스트*******");
 		for(OrderBookVo vo : list) {
-			System.out.println("도서 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
+			System.out.println("도서번호 : "+vo.getBook_no()+", 도서 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
 		}
 	}
 	

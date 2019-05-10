@@ -69,7 +69,6 @@ public class OrdersDao {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
@@ -119,7 +118,7 @@ public class OrdersDao {
 			conn = getConnection();
 			//select 할때 vo.get
 			
-			String sql = "select m.no, m.name, m.email, o.price, o.receive_address, o.no" + 
+			String sql = "select m.no, m.name, m.email, o.price, o.receive_address, o.no, o.order_no" + 
 					" FROM orders o ,member m where o.member_no = m.no and member_no = ? order by m.no";
 
 			pstmt = conn.prepareStatement(sql);
@@ -136,6 +135,7 @@ public class OrdersDao {
 				int price = rs.getInt(4);
 				String receiveAddr = rs.getString(5);
 				Long no = rs.getLong(6);
+				String orderNo = rs.getString(7);
 				
 				OrdersVo vo = new OrdersVo();
 				
@@ -145,6 +145,7 @@ public class OrdersDao {
 				vo.setPrice(price);
 				vo.setReceive_addr(receiveAddr);
 				vo.setNo(no);
+				vo.setOrder_no(orderNo);
 				
 				result.add(vo);
 			}
@@ -184,7 +185,7 @@ public class OrdersDao {
 
 			conn = getConnection();
 
-			String sql = "SELECT b.title, a.count, b.price FROM order_book a, book b WHERE a.book_no = b.no and a.order_no = ?";
+			String sql = "SELECT b.title, a.count, b.price, a.book_no FROM order_book a, book b WHERE a.book_no = b.no and a.order_no = ?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, ordersNo);
@@ -196,11 +197,13 @@ public class OrdersDao {
 				String title = rs.getString(1);
 				int count = rs.getInt(2);
 				int price = rs.getInt(3);
+				Long bookNo = rs.getLong(4);
 				
 				OrderBookVo vo = new OrderBookVo();
 				vo.setTitle(title);
 				vo.setCount(count);
 				vo.setPrice(price);
+				vo.setBook_no(bookNo);
 				
 				result.add(vo);
 			}

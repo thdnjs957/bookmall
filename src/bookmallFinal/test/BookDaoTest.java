@@ -27,6 +27,7 @@ public class BookDaoTest {
 	}
 
 	public static void getListTest() {
+		
 		List<BookVo> list = new BookDao().getList();
 
 		for (BookVo vo : list) {

@@ -17,12 +17,14 @@ import bookmallFinal.vo.OrdersVo;
 public class MainApp {
 	
 	public static void main(String[] args) {
+		
 		getListMember();
 		getListCategory();
 		getListBook();
 		getListCart(1L);
 		getListOrder(1L);
 		getListOrderBook(1L);
+	
 	}
 
 	//멤버 리스트
@@ -50,7 +52,7 @@ public class MainApp {
 		List<BookVo> list = dao.getList();
 		System.out.println("*******도서 리스트*******");
 		for(BookVo vo : list) {
-			System.out.println("제목 : "+vo.getTitle()+", 가격 : "+ vo.getPrice() + ", 카테고리넘버 : "+ vo.getCategory_no());
+			System.out.println("도서 제목 : "+vo.getTitle()+", 가격 : "+ vo.getPrice() + ", 카테고리넘버 : "+ vo.getCategory_no());
 		}
 	}
 	
@@ -60,7 +62,7 @@ public class MainApp {
 		List<CartVo> list = dao.getList(memberNo);
 		System.out.println("*******카트 리스트*******");
 		for(CartVo vo : list) {
-			System.out.println("제목 : "+vo.getBook_title()+", 가격 : "+ vo.getPrice() + ", 수량 : "+ vo.getCount());
+			System.out.println("도서 제목 : "+vo.getBook_title()+", 가격 : "+ vo.getPrice() + ", 수량 : "+ vo.getCount());
 		}
 	}
 	
@@ -70,7 +72,7 @@ public class MainApp {
 		List<OrdersVo> list = dao.getOrderList(memberNo);
 		System.out.println("*******주문 리스트*******");
 		for(OrdersVo vo : list) {
-			System.out.println("이름 : "+vo.getName()+", 가격 : "+ vo.getPrice() + ", 이메일 : "+ vo.getEmail()+", 주소 : "+vo.getReceive_addr());
+			System.out.println("주문 번호 : "+vo.getOrder_no()+", 이름 : "+vo.getName()+", 결제금액 : "+ vo.getPrice() + ", 이메일 : "+ vo.getEmail()+", 배송지 : "+vo.getReceive_addr());
 		}
 	}
 	// 주문 도서리스트
@@ -79,7 +81,7 @@ public class MainApp {
 		List<OrderBookVo> list = dao.getOrderBookList(ordersNo);
 		System.out.println("*******주문 도서 리스트*******");
 		for(OrderBookVo vo : list) {
-			System.out.println("도서 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
+			System.out.println("도서번호 : "+vo.getBook_no()+", 도서 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
 		}
 	}
 
