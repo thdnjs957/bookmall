@@ -22,11 +22,11 @@ public class BookDao {
 		try {
 			conn = getConnection();
 
-			String sql = " insert into book values(null,?,?,?)"; // 가격 제목 카테고리 넘버
+			String sql = "insert into book values(null,?,?,?)"; // 가격 제목 카테고리 넘버
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setLong(1, vo.getPrice());
-			pstmt.setString(2, vo.getTitle());
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setInt(2, vo.getPrice());
 			pstmt.setLong(3, vo.getCategory_no());
 
 			int count = pstmt.executeUpdate();

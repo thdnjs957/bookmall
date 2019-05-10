@@ -16,8 +16,6 @@ public class OrdersDao {
 	
 	public Long insert(OrdersVo vo) {
 
-		boolean result = false;
-
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		Statement stmt = null;
@@ -26,7 +24,7 @@ public class OrdersDao {
 		
 		try {
 			conn = getConnection();
-
+			
 			//String sql = " insert into orders values(null,?,?,?,?)"; //번호,주문번호,결제금액,배송지,고객번호
 			String sql = "insert into orders values(null,concat(date(now()),'-',LPAD((select count(*) from order_book),5,0)),?,?,?)";
 			pstmt = conn.prepareStatement(sql);
@@ -35,8 +33,8 @@ public class OrdersDao {
 			pstmt.setString(2, vo.getReceive_addr());
 			pstmt.setLong(3, vo.getMember_no());
 			
-			int count = pstmt.executeUpdate();
-
+			pstmt.executeUpdate();
+			
 			stmt = conn.createStatement();
 			
 			rs = stmt.executeQuery("select last_insert_id()"); //이 전에 쿼리의 pk값 받아오기
@@ -45,9 +43,6 @@ public class OrdersDao {
 				//vo.setNo(rs.getLong(1));
 				ordersNo = rs.getLong(1);
 			}
-			 
-			//result = (count == 1);
-			
 
 		} catch (SQLException e) {
 			System.out.println("error" + e);
@@ -74,13 +69,12 @@ public class OrdersDao {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
 			conn = getConnection();
 
-			String sql = " insert into order_book values(null,?,?,?)"; //번호, 수량, 주문번호,도서번호
+			String sql = "insert into order_book values(null,?,?,?)"; //번호, 수량, 주문번호,도서번호
 
 			pstmt = conn.prepareStatement(sql);
 			
@@ -88,11 +82,7 @@ public class OrdersDao {
 			pstmt.setLong(2, vo.getOrder_no());
 			pstmt.setLong(3, vo.getBook_no());
 			
-			
 			int count = pstmt.executeUpdate();
-
-			stmt = conn.createStatement();
-			
 
 			result = (count == 1);
 
@@ -129,7 +119,8 @@ public class OrdersDao {
 			conn = getConnection();
 			//select 할때 vo.get
 			
-			String sql = "select m.no, m.name, m.email, o.price, o.receive_addr, o.no from orders o and member m where o.member_no = m.no and member_no = ?";
+			String sql = "select m.no, m.name, m.email, o.price, o.receive_address, o.no" + 
+					" FROM orders o ,member m where o.member_no = m.no and member_no = ? order by m.no";
 
 			pstmt = conn.prepareStatement(sql);
 			

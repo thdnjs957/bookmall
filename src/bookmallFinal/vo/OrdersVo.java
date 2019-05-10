@@ -6,7 +6,7 @@ public class OrdersVo {
 	private String order_no;
 	private String name;
 	private int price;
-	private String receive_addr;
+	private String receive_address;
 	private Long member_no;
 	private String email;
 	
@@ -35,10 +35,10 @@ public class OrdersVo {
 		this.price = price;
 	}
 	public String getReceive_addr() {
-		return receive_addr;
+		return receive_address;
 	}
-	public void setReceive_addr(String receive_addr) {
-		this.receive_addr = receive_addr;
+	public void setReceive_addr(String receive_address) {
+		this.receive_address = receive_address;
 	}
 	public Long getMember_no() {
 		return member_no;
@@ -56,12 +56,10 @@ public class OrdersVo {
 		this.email = email;
 	}
 	
-	
 	@Override
 	public String toString() {
 		return "OrdersVo [no=" + no + ", order_no=" + order_no + ", name=" + name + ", price=" + price
-				+ ", receive_addr=" + receive_addr + ", member_no=" + member_no + ", email=" + email + "]";
+				+ ", receive_addr=" + receive_address + ", member_no=" + member_no + ", email=" + email + "]";
 	}
-	
 	
 }

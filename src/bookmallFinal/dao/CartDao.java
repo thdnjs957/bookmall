@@ -51,7 +51,7 @@ public class CartDao {
 
 	}
 
-	public List<CartVo> getList() {
+	public List<CartVo> getList(Long memberNo) {
 
 		List<CartVo> result = new ArrayList<CartVo>();
 
@@ -64,9 +64,11 @@ public class CartDao {
 
 			conn = getConnection();
 
-			String sql = "select c.member_no, c.book_no, c.count, b.title, b.price FROM cart c, book b WHERE c.book_no = b.no";
+			String sql = "select c.member_no, c.book_no, c.count, b.title, b.price FROM cart c, book b WHERE c.book_no = b.no and c.member_no = ?";
 
 			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setLong(1, memberNo);
 
 			rs = pstmt.executeQuery();
 

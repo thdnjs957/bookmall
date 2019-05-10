@@ -20,12 +20,11 @@ public class MainApp {
 		getListMember();
 		getListCategory();
 		getListBook();
-		getListCart(1);
-		getListOrder(1);
-		getListOrderBook(1);
+		getListCart(1L);
+		getListOrder(1L);
+		getListOrderBook(1L);
 	}
 
-	
 	//멤버 리스트
 	public static void getListMember() {
 		MemberDao dao = new MemberDao();
@@ -35,22 +34,23 @@ public class MainApp {
 			System.out.println("이름 : "+vo.getName()+", 전화번호 : "+ vo.getTel() + ", 이메일 : "+ vo.getEmail());
 		}
 	}
+	
 	//카테고리리스트
 	public static void getListCategory() {
 		CategoryDao dao = new CategoryDao();
 		List<CategoryVo> list = dao.getList();
 		System.out.println("*******카테고리 리스트*******");
 		for(CategoryVo vo : list) {
-			System.out.println("책 장르 : "+vo.getName());
+			System.out.println("도서 장르 : "+vo.getName());
 		}
 	}
 	// 책 리스트
 	public static void getListBook() {
 		BookDao dao = new BookDao();
 		List<BookVo> list = dao.getList();
-		System.out.println("*******책 리스트*******");
+		System.out.println("*******도서 리스트*******");
 		for(BookVo vo : list) {
-			System.out.println("제목 : "+vo.getTitle()+", 가격 : "+ vo.getPrice() + ", 카테고리 : "+ vo.getCategoryName());
+			System.out.println("제목 : "+vo.getTitle()+", 가격 : "+ vo.getPrice() + ", 카테고리넘버 : "+ vo.getCategory_no());
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class MainApp {
 		List<CartVo> list = dao.getList(memberNo);
 		System.out.println("*******카트 리스트*******");
 		for(CartVo vo : list) {
-			System.out.println("제목 : "+vo.getTitle()+", 가격 : "+ vo.getPrice() + ", 수량 : "+ vo.getCount());
+			System.out.println("제목 : "+vo.getBook_title()+", 가격 : "+ vo.getPrice() + ", 수량 : "+ vo.getCount());
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class MainApp {
 		List<OrderBookVo> list = dao.getOrderBookList(ordersNo);
 		System.out.println("*******주문 도서 리스트*******");
 		for(OrderBookVo vo : list) {
-			System.out.println("책 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
+			System.out.println("도서 제목 : "+vo.getTitle()+", 수량 : "+ vo.getCount() + ", 가격 : "+ vo.getPrice());
 		}
 	}
 

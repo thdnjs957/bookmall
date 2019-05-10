@@ -10,12 +10,13 @@ public class CartDaoTest {
 	public static void main(String[] args) {
 
 		insert(1L,1L,1); //고객 번호, 책 번호, 수량
-		insert(2L,2L,2);
-		getListTest();
+		insert(1L,2L,1);
+		getListTest(1L);
 
 	}
 
 	public static void insert(Long member_no,Long book_no, int count) {
+		
 		CartVo vo = new CartVo();
 		vo.setMember_no(member_no);
 		vo.setBook_no(book_no);
@@ -24,14 +25,13 @@ public class CartDaoTest {
 		new CartDao().insert(vo);
 	}
 
-	public static void getListTest() {
+	public static void getListTest(Long memberNo) {
 		
-		List<CartVo> list = new CartDao().getList();
+		List<CartVo> list = new CartDao().getList(memberNo);
 
 		for (CartVo vo : list) {
 			System.out.println(vo);
 		}
-		
 	}
 	
 }

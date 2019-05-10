@@ -9,19 +9,19 @@ public class BookDaoTest {
 
 	public static void main(String[] args) {
 
-//		insert(10000L, "어린왕자", 1L);
-//		insert(15000L, "수필 강의 노트 ", 2L);
-//		insert(20000L, "자바스크립트 완벽 가이드", 3L);
+		insert(10000, "어린왕자", 1L); // price, title, categoryNo
+		insert(15000, "수필 강의 노트 ", 2L);
+		insert(20000, "자바스크립트 완벽 가이드", 3L);
 		
 		getListTest();
 
 	}
 
-	public static void insert(int price, String title,Long category_no) {
+	public static void insert(int price, String title, Long categoryNo) {
 		BookVo vo = new BookVo();
 		vo.setPrice(price);
 		vo.setTitle(title);
-		vo.setCategory_no(category_no);
+		vo.setCategory_no(categoryNo);
 
 		new BookDao().insert(vo);
 	}
